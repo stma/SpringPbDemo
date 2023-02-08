@@ -1,6 +1,8 @@
 package com.progmatic.SpringIoc.controller;
 
 import com.progmatic.SpringIoc.model.Contact;
+import com.progmatic.SpringIoc.model.ContactRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,30 +10,34 @@ import java.util.*;
 @Service
 public class PhoneBookController {
 
-    private final List<Contact> contacts = new LinkedList<>();
+    private ContactRepository contactRepository;
 
+    public PhoneBookController(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
+
+    @Transactional
     public Iterable<Contact> getAllContact() {
-        return List.copyOf(contacts);
+        return contactRepository.findAll();
     }
 
+    @Transactional
     public void addContact(Contact contact) {
-        contacts.add(contact);
+        contactRepository.save(contact);
     }
 
-    public void removeContact(int idx) {
-        contacts.remove(idx);
+    public void removeContact(Long idx) {
+        contactRepository.deleteById(idx);
     }
 
     public List<Contact> searchContact(Optional<String> searchText) {
         List<Contact> result = new LinkedList<>();
+
         if (searchText.isPresent()) {
-            for (var c: contacts) {
-                if (c.match(searchText.get())) {
-                    result.add(c);
-                }
-            }
+            result = contactRepository.findByAll(searchText.get());
         }
-        return contacts.isEmpty()
+
+        return result.isEmpty()
                 ? List.of()
                 : List.copyOf(result);
     }

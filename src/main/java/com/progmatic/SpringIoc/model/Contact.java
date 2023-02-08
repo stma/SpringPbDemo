@@ -1,10 +1,26 @@
 package com.progmatic.SpringIoc.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Contact {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     private String name;
     private String email;
     private String tel;
     private String misc;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {
