@@ -8,7 +8,7 @@ import java.util.List;
 public interface ContactRepository extends CrudRepository<Contact, Long> {
     @Query("""
             select c from Contact c
-            where 
+            where
                 upper(c.name) like upper(concat('%', ?1, '%'))
                 or upper(c.tel) like upper(concat('%', ?1, '%'))
                 or upper(c.email) like upper(concat('%', ?1, '%'))
