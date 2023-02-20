@@ -3,6 +3,7 @@ package com.progmatic.SpringIoc.controller;
 import com.progmatic.SpringIoc.model.Contact;
 import com.progmatic.SpringIoc.model.ContactRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,8 +27,9 @@ public class PhoneBookController {
         contactRepository.save(contact);
     }
 
-    public void removeContact(Long idx) {
-        contactRepository.deleteById(idx);
+    @Transactional
+    public void deleteById(Long id) {
+        contactRepository.deleteById(id);
     }
 
     public List<Contact> searchContact(Optional<String> searchText) {

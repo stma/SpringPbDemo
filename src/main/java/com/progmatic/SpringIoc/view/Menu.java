@@ -8,6 +8,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.InputMismatchException;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -43,11 +44,25 @@ public class Menu {
                     case "u" -> addContact();
                     case "s" -> searchContacts();
                     case "l" -> listContacts();
+                    case "d" -> deleteContactById();
                     default -> System.out.println("Ilyen menuelem nincs, kerem valasszon ujra.\n");
                 }
                 this.printMenu();
             }
         }
+    }
+
+    private void deleteContactById() {
+        System.out.println("Melyik kapcsolatot szeretned torolni, mi az azonositoja: ");
+        Long id;
+        try {
+            id = sc.nextLong();
+        } catch (InputMismatchException e) {
+            System.out.println("Nem megfelelo azonositot adtal meg");
+            return;
+        }
+
+        controller.deleteById(id);
     }
 
     private void addContact() {
